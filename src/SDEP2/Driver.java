@@ -2,6 +2,7 @@ package SDEP2;
 
 import java.util.Scanner;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
@@ -20,38 +21,66 @@ import org.apache.hadoop.util.ToolRunner;
 public class Driver extends Configured implements Tool{
 	
 	public int run(String[] args) throws Exception{ 
-
+	
 		
-	 Job job = new Job();
+		 //Info
+			//0 = caminho dos arquivos AGREGADOS
+			//1 = dado
+			//2 = ano inicial
+			//3 = ano final
+			//4 = metodo
+			//5 = tipo de agregacao
+			//6 = pasta output
+	    
+		Configuration conf = getConf();
+		conf.set("dado", args[1]);
+		conf.set("anoI", args[2]);
+		conf.set("anoF", args[3]);
+		conf.set("metodo", args[4]);
+		conf.set("agregacao", args[5]);	
+		
+		Job job = Job.getInstance(conf);
 
 	 job.setJarByClass(Driver.class);
 
-	 job.setJobName("Teste bigFile");
+	 job.setJobName("Results para"+ args[1]);
 
-	 MultipleInputs.addInputPath(job, new Path(input), CombinedInputFormat.class, testMapper.class);
-	 MultipleInputs.addInputPath(job, new Path(input2), CombinedInputFormat.class, testMapper.class);
+	 int anoIni = 0;
 	 
+	 for(anoIni = Integer.parseInt(args[2]); anoIni <= Integer.parseInt(args[3]); anoIni++){
+		 if(args[4].equals("media")){
+	    	MultipleInputs.addInputPath(job, new Path(args[0]+"/"+anoIni), CombinedInputFormat.class, MediaMapper.class);
+		 }
+     }
+	 
+	
+	 FileOutputFormat.setOutputPath(job,new Path(args[6]));
 
-	 FileOutputFormat.setOutputPath(job,new Path(output));
+	 switch (args[4]){
+	 case "media": 	 
+		 job.setMapperClass(MediaMapper.class);
 
-	 job.setMapperClass(testMapper.class);
+		 job.setReducerClass(MediaReducer.class);
 
-	 job.setReducerClass(testReducer.class);
+		 job.setOutputKeyClass(Text.class);
 
-	 job.setOutputKeyClass(Text.class);
-
-	 job.setOutputValueClass(DoubleWritable.class);
+		 job.setOutputValueClass(DoubleWritable.class);
+		 
+		 break;
+	 }
+	 
 
 	 System.exit(job.waitForCompletion(true) ? 0:1); 
 
 	 boolean success = job.waitForCompletion(true);
 
 	 return success ? 0 : 1;
+	 
 
 	 }
 
 	public static void main(String[] args) throws Exception {
-		String[] info = new String[8]		
+		String[] info = new String[7];		
 				
 	Scanner scan = new Scanner(System.in);
 	
@@ -68,15 +97,15 @@ public class Driver extends Configured implements Tool{
 		//6 = pasta output
 	 
 	 boolean ok = true;
-	 info[0] = args[0];
-	 
+	 //info[0] = args[0];
+	 /*
 	 while (ok){
 	 System.out.println ("Bem vindo ao F2H Analyser! Vamos Começar?");
 	 System.out.println("Qual dado você deseja analisar hoje?");
 	 System.out.println("temp- Temperatura");
 	 System.out.println("ca- Pontos de Condesacao da Agua");
 	 System.out.println("pn- Pressao no nivel do mar");
-	 System.out.println("pe- Pressao estacionaria");
+	 System.out.println("pr- Pressao");
 	 System.out.println("vb- Visibilidade");
 	 System.out.println("vv- Velocidade do Vento");
 	 System.out.println("rv- Rajadas de Vento");
@@ -84,10 +113,10 @@ public class Driver extends Configured implements Tool{
 	 System.out.println("nv- Neve");
 	 info[1] = scan.next();
 	 
-	 System.out.println("Sobre qual intervalo de tempo você deseja analisar "+indiceDado+ "?");
+	 System.out.println("Sobre qual intervalo de tempo você deseja analisar "+info[1]+ "?");
 	 System.out.println("Temos informações desde 1910 ate 2016!");
-	 System.out.print("Ano Inicial:"); info[2]= Integer.parseInt(scan.next());
-	 System.out.print("Ano Final:"); info[3]= Integer.parseInt(scan.next());
+	 System.out.print("Ano Inicial:"); info[2]= scan.next();
+	 System.out.print("Ano Final:"); info[3]= scan.next();
 	 
 	 System.out.println("-----Loading-------");
 	 
@@ -118,22 +147,29 @@ public class Driver extends Configured implements Tool{
 	 System.out.println("Agregando seus resultados por: "+ info[5]);
 	 System.out.println("O resultado da analise pode ser encontrado em:" +info[6]);
 	 System.out.println("========================================");
-	 	  
+	*/
+	 
+	 info[0] = "/home/hduser/Documents/separetedData/gsod/resumedData/";
+	 info[1] = "temp";
+	 info[2] = "1940";
+	 info[3] = "1942";
+	 info[4] = "media";
+	 info[5] = "ano";
+	 info[6] = "output";
 
 	 Driver driver = new Driver();
 
-	 int exitCode = ToolRunner.run(driver, args);
+	 int exitCode = ToolRunner.run(driver, info);
 
 	 System.exit(exitCode);
-	 }
+	 //}
      
 	 
 
 
-	 }
+ }
 	
 	
-
 }
 
 
