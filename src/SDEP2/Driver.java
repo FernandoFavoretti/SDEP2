@@ -49,8 +49,23 @@ public class Driver extends Configured implements Tool{
 	 
 	 for(anoIni = Integer.parseInt(args[2]); anoIni <= Integer.parseInt(args[3]); anoIni++){
 		 if(args[4].equals("media")){
-	    	MultipleInputs.addInputPath(job, new Path(args[0]+"/"+anoIni), CombinedInputFormat.class, MediaMapper.class);
+	    	MultipleInputs.addInputPath(job, new Path(args[0]+"/"+anoIni), CombinedInputFormat.class, SimpleStatisticsMapper.class);
+		 }else
+		 if(args[4].equals("max")){
+		    	MultipleInputs.addInputPath(job, new Path(args[0]+"/"+anoIni), CombinedInputFormat.class, SimpleStatisticsMapper.class);
 		 }
+		 if(args[4].equals("min")){
+		    	MultipleInputs.addInputPath(job, new Path(args[0]+"/"+anoIni), CombinedInputFormat.class, SimpleStatisticsMapper.class);
+		 }
+		 if(args[4].equals("var")){
+		    	MultipleInputs.addInputPath(job, new Path(args[0]+"/"+anoIni), CombinedInputFormat.class, SimpleStatisticsMapper.class);
+		 }
+		 if(args[4].equals("desvio")){
+		    	MultipleInputs.addInputPath(job, new Path(args[0]+"/"+anoIni), CombinedInputFormat.class, SimpleStatisticsMapper.class);
+		 }
+		 if(args[4].equals("mq")){
+		    	MultipleInputs.addInputPath(job, new Path(args[0]+"/"+anoIni), CombinedInputFormat.class, MinimosMapper.class);
+			 }
      }
 	 
 	
@@ -58,7 +73,7 @@ public class Driver extends Configured implements Tool{
 
 	 switch (args[4]){
 	 case "media": 	 
-		 job.setMapperClass(MediaMapper.class);
+		 job.setMapperClass(SimpleStatisticsMapper.class);
 
 		 job.setReducerClass(MediaReducer.class);
 
@@ -67,6 +82,59 @@ public class Driver extends Configured implements Tool{
 		 job.setOutputValueClass(DoubleWritable.class);
 		 
 		 break;
+	 case "max":
+		 job.setMapperClass(SimpleStatisticsMapper.class);
+
+		 job.setReducerClass(MaxReducer.class);
+
+		 job.setOutputKeyClass(Text.class);
+
+		 job.setOutputValueClass(DoubleWritable.class);
+		 
+		 break;
+	 case "min":
+		 job.setMapperClass(SimpleStatisticsMapper.class);
+
+		 job.setReducerClass(MinReducer.class);
+
+		 job.setOutputKeyClass(Text.class);
+
+		 job.setOutputValueClass(DoubleWritable.class);
+		 
+		 break;
+	 case "var":
+		 job.setMapperClass(SimpleStatisticsMapper.class);
+
+		 job.setReducerClass(VarianciaReducer.class);
+
+		 job.setOutputKeyClass(Text.class);
+
+		 job.setOutputValueClass(DoubleWritable.class);
+		 
+		 break;
+	 case "desvio":
+		 job.setMapperClass(SimpleStatisticsMapper.class);
+
+		 job.setReducerClass(DesvioReducer.class);
+
+		 job.setOutputKeyClass(Text.class);
+
+		 job.setOutputValueClass(DoubleWritable.class);
+		 
+		 break;
+	 case "mq": 	 
+		 job.setMapperClass(MinimosMapper.class);
+
+		 job.setReducerClass(MinimosReducer.class);
+		 
+		 job.setMapOutputKeyClass(Text.class);
+		 job.setMapOutputValueClass(Text.class);
+		 job.setOutputKeyClass(Text.class);
+
+		 job.setOutputValueClass(Text.class);
+		 
+		 break;
+	
 	 }
 	 
 
@@ -122,10 +190,11 @@ public class Driver extends Configured implements Tool{
 	 
 	 System.out.println("Qual informação você deseja para os parametros escolhidos?");
 	 System.out.println("media - Media");
-	 System.out.println("mdn   - Mediana");
 	 System.out.println("max   - Valor maximo");
 	 System.out.println("min   - Valor minimo");
-	 System.out.println("moda  - Moda");
+	 System.out.println("var   - Variancia");
+	 System.out.println("desvio- Desvio Padrão");
+	 System.out.println("mq - Minimos Quadrados");
 	 info[4]= scan.next();
 	 
 	 System.out.println("-----Loading-------");
@@ -153,8 +222,8 @@ public class Driver extends Configured implements Tool{
 	 info[1] = "temp";
 	 info[2] = "1940";
 	 info[3] = "1942";
-	 info[4] = "media";
-	 info[5] = "ano";
+	 info[4] = "desvio";
+	 info[5] = "mesano";
 	 info[6] = "output";
 
 	 Driver driver = new Driver();

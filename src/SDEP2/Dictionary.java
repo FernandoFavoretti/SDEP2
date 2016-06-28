@@ -9,6 +9,26 @@ public class Dictionary {
 		return resp;
 	} 
 	
+	public static int[] translateMes(){
+		int[] resp = new int[2];
+		resp[0] = 18;
+		resp[1] = 20;
+		return resp;
+	}
+	
+	public static int[] translateSemana(){
+		int[] resp = new int[2];
+		resp[0] = 20;
+		resp[1] = 22;
+		return resp;
+	}
+	public static int[] translateMesAno(){
+		int[] resp = new int[2];
+		resp[0] = 14;
+		resp[1] = 20;
+		return resp;
+	}
+	
 	public static int[] translateDado(String dado){
 		int[] resp = new int[2];
 		
