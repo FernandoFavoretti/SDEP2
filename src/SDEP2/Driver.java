@@ -156,23 +156,19 @@ public class Driver extends Configured implements Tool{
 public int run(String[] args) throws Exception {
 		runMR(args);
 		Dictionary dic = new Dictionary();
+                if(args[4] != "mq"){
 		Graphs chart = new Graphs(
 			      "F2H GRAPH MAKER",
 			      dic.translateOperacoes(args[4]) +": "+dic.translateNomeDado(args[1]),
-			      dic.translateAgregacao(args[5]), dic.translateNomeDado(args[1]), "output");
-
-			      chart.pack( );
-			      RefineryUtilities.centerFrameOnScreen( chart );
-			      chart.setVisible( true );
-			      Scanner scan = new Scanner(System.in);
-			      scan.next();
-			      scan.close();
+			      dic.translateAgregacao(args[5]), dic.translateNomeDado(args[1]), args[6]);
+}
+                
 		return 0;
  }
 
 	
 	
-public static void main(String[] args) throws Exception {
+/*public static void main(String[] args) throws Exception {
 		String[] info = new String[7];		
 				
 	Scanner scan = new Scanner(System.in);
@@ -241,7 +237,7 @@ public static void main(String[] args) throws Exception {
 	 System.out.println("Agregando seus resultados por: "+ info[5]);
 	 System.out.println("O resultado da analise pode ser encontrado em:" +info[6]);
 	 System.out.println("========================================");
-	*/
+	
 	 
 	 info[0] = "/home/hduser/Documents/separetedData/gsod/resumedData/";
 	 info[1] = "temp";
@@ -251,17 +247,18 @@ public static void main(String[] args) throws Exception {
 	 info[5] = "ano";
 	 info[6] = "output";
 
-	 Driver driver = new Driver();
-	 int exitCode = ToolRunner.run(driver, info);
-     System.exit(exitCode);
 	 //}
-     
-	 
+      
 
 
- }
+ }*/
 	
+public void start(String[] info) throws Exception{
+     Driver driver = new Driver();
+     int exitCode = ToolRunner.run(driver, info);
+     System.exit(exitCode);
 	
+}	
 }
 
 

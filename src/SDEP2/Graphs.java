@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPosition;
@@ -44,6 +45,11 @@ public Graphs( String applicationTitle , String chartTitle, String serie, String
        PlotOrientation.VERTICAL,
        true,true,false);
        
+     int width = 640; /* Width of the image */
+      int height = 480; /* Height of the image */ 
+      File lineChartFile = new File( diretorioPart+"/LineChart.jpeg" ); 
+      ChartUtilities.saveChartAsJPEG(lineChartFile ,lineChart, width ,height);
+   
     ChartPanel chartPanel = new ChartPanel( lineChart );
     chartPanel.setPreferredSize( new java.awt.Dimension( 560 , 367 ) );
     setContentPane( chartPanel );
@@ -58,6 +64,9 @@ public Graphs( String applicationTitle , String chartTitle, String serie, String
         String line;
         while ((line = br.readLine()) != null) {
         	String[] parts = line.split("	");
+                System.out.println(parts[0]);
+                System.out.println(parts[1]);
+                
         	dataset.addValue(Double.parseDouble(parts[1]) , serie , parts[0] );
         }
     }

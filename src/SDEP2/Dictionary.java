@@ -95,7 +95,7 @@ public class Dictionary {
 		if(dado.equals("rv")){
 			resp = "Rajadas de Vento";
 		}
-		if(dado.equals("pr")){
+		if(dado.equals("pc")){
 			resp = "Precipitação";
 		}
 		if(dado.equals("nv")){
@@ -135,7 +135,7 @@ public class Dictionary {
 			resp[0] = 95;
 			resp[1] = 100;
 		}
-		if(dado.equals("pr")){
+		if(dado.equals("pc")){
 			resp[0] = 118;
 			resp[1] = 123;
 		}
