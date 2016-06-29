@@ -30,9 +30,10 @@ public class SimpleStatisticsMapper extends Mapper<LongWritable, Text, Text, Dou
 		agreg = dic.translateMes();	
 		}else if(agregacao.equals("semana")){
 		agreg = dic.translateSemana();	
-		}
-		else if(agregacao.equals("mesano")){
-			agreg = dic.translateMesAno();	
+		}else if(agregacao.equals("mesano")){
+		agreg = dic.translateMesAno();	
+		}else if(agregacao.equals("messem")){
+		agreg = dic.translateMesSemana();	
 		}
 		//Dicionario para retornar a posicao do dado escolhido no arquivo
 		int[] dados = new int[2];
@@ -69,9 +70,11 @@ public class SimpleStatisticsMapper extends Mapper<LongWritable, Text, Text, Dou
 					break;
 					
 				}
-				if(var != missing) context.write(new Text(group), new DoubleWritable(var));
-				return;
-			
+				{
+				
+					if(var != missing) context.write(new Text(group), new DoubleWritable(var));
+					return;
+				}
 		
 }
 	

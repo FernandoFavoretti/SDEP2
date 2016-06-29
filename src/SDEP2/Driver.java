@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
@@ -15,13 +16,15 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import org.jfree.ui.RefineryUtilities;
 
 /*This class is responsible for running map reduce job*/
 
 public class Driver extends Configured implements Tool{
 	
-	public int run(String[] args) throws Exception{ 
 	
+	public int runMR(String[] args)throws Exception{ 
+		
 		
 		 //Info
 			//0 = caminho dos arquivos AGREGADOS
@@ -38,6 +41,14 @@ public class Driver extends Configured implements Tool{
 		conf.set("anoF", args[3]);
 		conf.set("metodo", args[4]);
 		conf.set("agregacao", args[5]);	
+		
+		// Deleta a pasta output se ela existir
+		FileSystem fs = FileSystem.get(conf);
+		fs.delete(new Path("output"), true);
+		
+		if(conf.get("agregacao").equals("semana")){
+			conf.set("cont", "0");
+		}
 		
 		Job job = Job.getInstance(conf);
 
@@ -66,7 +77,7 @@ public class Driver extends Configured implements Tool{
 		 if(args[4].equals("mq")){
 		    	MultipleInputs.addInputPath(job, new Path(args[0]+"/"+anoIni), CombinedInputFormat.class, MinimosMapper.class);
 			 }
-     }
+    }
 	 
 	
 	 FileOutputFormat.setOutputPath(job,new Path(args[6]));
@@ -136,18 +147,32 @@ public class Driver extends Configured implements Tool{
 		 break;
 	
 	 }
-	 
+	
+	 return(job.waitForCompletion(true) ? 0:1); 
 
-	 System.exit(job.waitForCompletion(true) ? 0:1); 
+}
+	
+	
+public int run(String[] args) throws Exception {
+		runMR(args);
+		Dictionary dic = new Dictionary();
+		Graphs chart = new Graphs(
+			      "F2H GRAPH MAKER",
+			      dic.translateOperacoes(args[4]) +": "+dic.translateNomeDado(args[1]),
+			      dic.translateAgregacao(args[5]), dic.translateNomeDado(args[1]), "output");
 
-	 boolean success = job.waitForCompletion(true);
+			      chart.pack( );
+			      RefineryUtilities.centerFrameOnScreen( chart );
+			      chart.setVisible( true );
+			      Scanner scan = new Scanner(System.in);
+			      scan.next();
+			      scan.close();
+		return 0;
+ }
 
-	 return success ? 0 : 1;
-	 
-
-	 }
-
-	public static void main(String[] args) throws Exception {
+	
+	
+public static void main(String[] args) throws Exception {
 		String[] info = new String[7];		
 				
 	Scanner scan = new Scanner(System.in);
@@ -199,8 +224,8 @@ public class Driver extends Configured implements Tool{
 	 
 	 System.out.println("-----Loading-------");
 	 System.out.println("Como voce deseja que o resultado seja agregado?");
-	 System.out.println("semana - Segregar por semana");
-	 System.out.println("semana -Agregar por dia");
+	 System.out.println("dia - Agregar por dia");
+	 System.out.println("mes -Agregar por mes");
 	 System.out.println("ano - Agregar por ano");
 	 info[5] = scan.next();
 	 
@@ -223,14 +248,12 @@ public class Driver extends Configured implements Tool{
 	 info[2] = "1940";
 	 info[3] = "1942";
 	 info[4] = "desvio";
-	 info[5] = "mesano";
+	 info[5] = "ano";
 	 info[6] = "output";
 
 	 Driver driver = new Driver();
-
 	 int exitCode = ToolRunner.run(driver, info);
-
-	 System.exit(exitCode);
+     System.exit(exitCode);
 	 //}
      
 	 
