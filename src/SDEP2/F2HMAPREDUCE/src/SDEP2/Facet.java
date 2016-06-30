@@ -98,7 +98,7 @@ public class Facet extends javax.swing.JFrame {
 
         jLabel8.setText("Agregar Por:");
 
-        agregacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ano", "Mes", "Dia", "Meses por Anos", "Dias por Meses" }));
+        agregacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ano", "Mes", "Dia", "Meses por Anos", "Dias por Meses", "Estação" }));
 
         mqText.setText("Segundo Dado:");
 
@@ -177,7 +177,7 @@ public class Facet extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 615, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -227,66 +227,89 @@ public class Facet extends javax.swing.JFrame {
         String dado1 = (String) dado.getSelectedItem();
         String op = (String) ops.getSelectedItem();
         String agreg = (String) agregacao.getSelectedItem();
-        
+
         //Dicionario dado
-         if(dado1.equals("Temperatura")){
+        if (dado1.equals("Temperatura")) {
             dado1 = "temp";
-        }else if(dado1.equals("Pressao ao Nivel do Mar")){
+        } else if (dado1.equals("Pressao ao Nivel do Mar")) {
             dado1 = "pn";
-        }else if(dado1.equals("Pressao")){
+        } else if (dado1.equals("Pressao")) {
             dado1 = "pr";
-        }else if(dado1.equals("Visibilidade")){
+        } else if (dado1.equals("Visibilidade")) {
             dado1 = "vb";
-        }else if(dado1.equals("Velocidade do Vento")){
+        } else if (dado1.equals("Velocidade do Vento")) {
             dado1 = "vv";
-        }else if(dado1.equals("Rajadas de Vento")){
+        } else if (dado1.equals("Rajadas de Vento")) {
             dado1 = "rv";
-        }else if(dado1.equals("Neve")){
+        } else if (dado1.equals("Neve")) {
             dado1 = "nv";
-        }else if(dado1.equals("Pontos de Condesacao da Agua")){
+        } else if (dado1.equals("Pontos de Condesacao da Agua")) {
             dado1 = "ca";
-        }else if(dado1.equals("Precipitacao")){
+        } else if (dado1.equals("Precipitacao")) {
             dado1 = "pc";
         }
-         
-         //Dicionario metodo
-         if(op.equals("Media")){
-             op ="media";
-         }else if(op.equals("Desvio Padrao")){
-             op = "desvio";
-         }else if(op.equals("Maximo")){
-             op = "max";
-         }else if(op.equals("Minimo")){
-             op = "min";
-         }else if(op.equals("Variancia")){
-             op = "var";
-         }else if(op.equals("Minimos Quadrados")){
-             op = "mq";
-         }
-         
-         //Dicionario agragacao
-     
-        if(agreg.equals("Ano")){
-             agreg = "ano";
-         }else if(agreg.equals("Mes")){
-             agreg = "mes";
-         }else if(agreg.equals("Dia")){
-             agreg = "dia";
-         }else if(agreg.equals("Meses por Anos")){
-             agreg = "mesano";
-         }else if(agreg.equals("Dias por Meses")){
-             agreg = "messem";
-         }
-        
-        String segundoDado = "";
-        if (op.equals("Minimos Quadrados")) {
-            segundoDado = (String)dado2.getSelectedItem();
-        } 
-        
-        if(!segundoDado.equals("")){
-            dado1 = dado1+"+"+segundoDado;
+
+        //Dicionario metodo
+        if (op.equals("Media")) {
+            op = "media";
+        } else if (op.equals("Desvio Padrao")) {
+            op = "desvio";
+        } else if (op.equals("Maximo")) {
+            op = "max";
+        } else if (op.equals("Minimo")) {
+            op = "min";
+        } else if (op.equals("Variancia")) {
+            op = "var";
+        } else if (op.equals("Minimos Quadrados")) {
+            op = "mq";
         }
-        
+
+        //Dicionario agragacao
+        if (agreg.equals("Ano")) {
+            agreg = "ano";
+        } else if (agreg.equals("Mes")) {
+            agreg = "mes";
+        } else if (agreg.equals("Dia")) {
+            agreg = "dia";
+        } else if (agreg.equals("Meses por Anos")) {
+            agreg = "mesano";
+        } else if (agreg.equals("Dias por Meses")) {
+            agreg = "messem";
+        } else if (agreg.equals("Estação")) {
+            agreg = "estacao";
+        }
+
+        String segundoDado = "";
+        if (op.equals("mq")) {
+
+            segundoDado = (String) dado2.getSelectedItem();
+        }
+
+        if (!segundoDado.equals("")) {
+            //Dicionario dado
+            if (segundoDado.equals("Temperatura")) {
+                segundoDado = "temp";
+            } else if (segundoDado.equals("Pressao ao Nivel do Mar")) {
+                segundoDado = "pn";
+            } else if (segundoDado.equals("Pressao")) {
+                segundoDado = "pr";
+            } else if (segundoDado.equals("Visibilidade")) {
+                segundoDado = "vb";
+            } else if (segundoDado.equals("Velocidade do Vento")) {
+                segundoDado = "vv";
+            } else if (segundoDado.equals("Rajadas de Vento")) {
+                segundoDado = "rv";
+            } else if (segundoDado.equals("Neve")) {
+                segundoDado = "nv";
+            } else if (segundoDado.equals("Pontos de Condesacao da Agua")) {
+                segundoDado = "ca";
+            } else if (segundoDado.equals("Precipitacao")) {
+                segundoDado = "pc";
+            }
+
+            dado1 = dado1 + "+" + segundoDado;
+        }
+
         Driver drv = new Driver();
         String[] params = new String[7];
         params[0] = in;
@@ -296,15 +319,13 @@ public class Facet extends javax.swing.JFrame {
         params[4] = op;
         params[5] = agreg;
         params[6] = out;
-        
+
         try {
-            this.setVisible(false);
-            dispose(); //Destroy the JFrame object
             drv.start(params);
         } catch (Exception ex) {
             Logger.getLogger(Facet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 

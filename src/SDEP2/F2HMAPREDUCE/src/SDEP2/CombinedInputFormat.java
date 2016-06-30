@@ -17,24 +17,25 @@ public class CombinedInputFormat extends CombineFileInputFormat<LongWritable, Te
     @Override
     public RecordReader<LongWritable, Text>
             createRecordReader(InputSplit split, TaskAttemptContext context)
-                    throws IOException {
+            throws IOException {
 
-        CombineFileRecordReader<LongWritable, Text> reader = 
-                new CombineFileRecordReader<LongWritable, Text>(
-                        (CombineFileSplit) split, context, myCombineFileRecordReader.class);        
+        CombineFileRecordReader<LongWritable, Text> reader
+                = new CombineFileRecordReader<LongWritable, Text>(
+                        (CombineFileSplit) split, context, myCombineFileRecordReader.class);
         return reader;
     }
 
     public static class myCombineFileRecordReader extends RecordReader<LongWritable, Text> {
+
         private LineRecordReader lineRecordReader = new LineRecordReader();
 
-        public myCombineFileRecordReader(CombineFileSplit split, 
+        public myCombineFileRecordReader(CombineFileSplit split,
                 TaskAttemptContext context, Integer index) throws IOException {
 
-            FileSplit fileSplit = new FileSplit(split.getPath(index), 
-                                                split.getOffset(index),
-                                                split.getLength(index), 
-                                                split.getLocations());
+            FileSplit fileSplit = new FileSplit(split.getPath(index),
+                    split.getOffset(index),
+                    split.getLength(index),
+                    split.getLocations());
             lineRecordReader.initialize(fileSplit, context);
         }
 
@@ -68,6 +69,6 @@ public class CombinedInputFormat extends CombineFileInputFormat<LongWritable, Te
         @Override
         public boolean nextKeyValue() throws IOException, InterruptedException {
             return lineRecordReader.nextKeyValue();
-        }        
+        }
     }
 }
