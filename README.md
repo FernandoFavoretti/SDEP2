@@ -1,2 +1,2 @@
 # SDEP2
-Ep de Sistemas Distribuidos usando Map Reduce
+Final work for the discipline of Distributed System of the Informational Systems course in the University of São Paulo
